@@ -29,7 +29,6 @@ def max_value():
     return max([max(r) for r in x])
 
 
-@app.route('/print_board')
 def print_board():
     with app.app_context():
         for i in range(0, 4):

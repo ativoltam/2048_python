@@ -34,8 +34,6 @@ def print_board():
         for i in range(0, 4):
             for j in range(0, 4):
                 print_inline('{:5d}'.format(x[i][j])),
-            print_new_line()
-        print_new_line()
         return jsonify(x)
 
 
@@ -119,4 +117,3 @@ def play_the_game():
         process_move(direction_right)
         add_number()
         return redirect(url_for('main'))
-    return jsonify(x)

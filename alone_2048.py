@@ -5,7 +5,7 @@
 from random import randint
 from flask import render_template
 from app import app
-from flask import jsonify, request
+from flask import jsonify, request, redirect, url_for
 
 
 @app.route("/")
@@ -104,12 +104,19 @@ def play_the_game():
     add_number()
     print_board()
     if direction_forward is not None:
-        moved = process_move(direction_forward)
+        process_move(direction_forward)
+        add_number()
+        return redirect(url_for('main'))
     if direction_backward is not None:
-        moved = process_move(direction_backward)
+        process_move(direction_backward)
+        add_number()
+        return redirect(url_for('main'))
     if direction_left is not None:
-        moved = process_move(direction_left)
+        process_move(direction_left)
+        add_number()
+        return redirect(url_for('main'))
     if direction_right is not None:
-        moved = process_move(direction_right)
-    if moved: add_number()
+        process_move(direction_right)
+        add_number()
+        return redirect(url_for('main'))
     return jsonify(x)

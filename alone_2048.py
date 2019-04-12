@@ -3,6 +3,14 @@
 # - wasd for controls
 # - Does not support windows
 from random import randint
+from flask import render_template
+from app import app
+from flask import jsonify
+
+
+@app.route("/")
+def main():
+    return render_template('index.html', table=x)
 
 
 def print_inline(s):
@@ -22,11 +30,13 @@ def max_value():
 
 
 def print_board():
-    for i in range(0, 4):
-        for j in range(0, 4):
-            print_inline('{:5d}'.format(x[i][j])),
+    with app.app_context():
+        for i in range(0, 4):
+            for j in range(0, 4):
+                print_inline('{:5d}'.format(x[i][j])),
+            print_new_line()
         print_new_line()
-    print_new_line()
+        return jsonify(x)
 
 
 def add_number():
@@ -85,30 +95,31 @@ def rotate(n):  # rotate 90 degrees n times
 x = [[0 for c in range(4)] for r in range(4)]
 
 
-def getc():
-    import sys, tty, termios
-    fd = sys.stdin.fileno()
-    old_settings = termios.tcgetattr(fd)
-    try:
-        tty.setraw(sys.stdin.fileno())
-        ch = sys.stdin.read(1)
-    finally:
-        termios.tcsetattr(fd, termios.TCSADRAIN, old_settings)
-    return ch
+# c is the step what it reads from terminal input as of now, this will be changed for endpoint calls
+# def getc():
+#     import sys, tty, termios
+#     fd = sys.stdin.fileno()
+#     old_settings = termios.tcgetattr(fd)
+#     try:
+#         tty.setraw(sys.stdin.fileno())
+#         ch = sys.stdin.read(1)
+#     finally:
+#         termios.tcsetattr(fd, termios.TCSADRAIN, old_settings)
+#     return ch
 
 
 add_number()
-while True:
-    print_board()
-    move = getc()
-    if move == 'q':
-        print_inline("Exiting...\n")
-        break
-    moved = process_move(move)
-    if moved: add_number()
-    if max_value() >= 2048:
-        print_inline("You win\n")
-        break
-    if count_zeroes() == 0:
-        print_inline("You lost\n")
-        break
+# while True:
+# print_board()
+    # move = getc()
+    # if move == 'q':
+    #     print_inline("Exiting...\n")
+    #     break
+    # moved = process_move(move)
+    # if moved: add_number()
+    # if max_value() >= 2048:
+    #     print_inline("You win\n")
+    #     break
+    # if count_zeroes() == 0:
+    #     print_inline("You lost\n")
+    #     break

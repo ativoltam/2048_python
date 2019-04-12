@@ -95,26 +95,21 @@ def rotate(n):  # rotate 90 degrees n times
 x = [[0 for c in range(4)] for r in range(4)]
 
 
-@app.route('/handle_direction', methods=["POST"])
-def handle_direction():
-    with app.test_request_context():
-        if request.method == 'POST':
-            direction_forward = request.form.get('up')
-            direction_backward = request.form.get('down')
-            direction_left = request.form.get('left')
-            direction_right = request.form.get('right')
-            if direction_forward is not None:
-                return "w"
-            if direction_backward is not None:
-                return "s"
-            if direction_left is not None:
-                return "a"
-            else: return "d"
-
-
-add_number()
-while True:
+@app.route('/play_the_game', methods=['GET', 'POST'])
+def play_the_game():
+    direction_forward = request.form.get('w')
+    direction_backward = request.form.get('s')
+    direction_left = request.form.get('a')
+    direction_right = request.form.get('d')
+    add_number()
     print_board()
-    move = handle_direction()
-    moved = process_move(move)
+    if direction_forward is not None:
+        moved = process_move(direction_forward)
+    if direction_backward is not None:
+        moved = process_move(direction_backward)
+    if direction_left is not None:
+        moved = process_move(direction_left)
+    if direction_right is not None:
+        moved = process_move(direction_right)
     if moved: add_number()
+    return jsonify(x)

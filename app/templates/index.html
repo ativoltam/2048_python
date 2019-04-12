@@ -9,21 +9,21 @@
 {% endblock content %}
 <tr>
     <td>
-        <form action="/handle_direction" method="POST">
-          <input type="hidden" name="site" value="up">
-          <button class="btn btn-default" type="submit" name="up" value="up">Up</button>
+        <form action="/play_the_game" method="POST">
+          <input type="hidden" name="site" value="w">
+          <button class="btn btn-default" type="submit" name="w" value="w">Up</button>
         </form>
-        <form action="/handle_direction" method="POST">
-          <input type="hidden" name="site" value="down">
-          <button class="btn btn-default" type="submit" name="down" value="down">Down</button>
+        <form action="/play_the_game" method="POST">
+          <input type="hidden" name="site" value="s">
+          <button class="btn btn-default" type="submit" name="s" value="s">Down</button>
         </form>
-        <form action="/handle_direction" method="POST">
-          <input type="hidden" name="site" value="left">
-          <button class="btn btn-default" type="submit" name="left" value="left">Left</button>
+        <form action="/play_the_game" method="POST">
+          <input type="hidden" name="site" value="a">
+          <button class="btn btn-default" type="submit" name="a" value="a">Left</button>
         </form>
-        <form action="/handle_direction" method="POST">
-          <input type="hidden" name="site" value="right">
-          <button class="btn btn-default" type="submit" name="right" value="right">Right</button>
+        <form action="/play_the_game" method="POST">
+          <input type="hidden" name="site" value="d">
+          <button class="btn btn-default" type="submit" name="d" value="d">Right</button>
         </form>
     </td>
 </tr>

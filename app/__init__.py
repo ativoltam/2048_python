@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, render_template
 import alone_2048
 
 app = Flask(__name__)
@@ -7,4 +7,4 @@ app.config['SECRET_KEY'] = 'so amazingly secret' # for session values
 
 @app.route("/")
 def main():
-	return alone_2048.print_board()
+	return render_template('index.html')

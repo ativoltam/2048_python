@@ -7,4 +7,4 @@ app.config['SECRET_KEY'] = 'so amazingly secret' # for session values
 
 @app.route("/")
 def main():
-	return alone_2048
+	return alone_2048.print_board()

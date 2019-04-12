@@ -85,6 +85,7 @@ def rotate(n):  # rotate 90 degrees n times
 x = [[0 for c in range(4)] for r in range(4)]
 
 
+# c is the step what it reads from terminal input as of now, this will be changed for endpoint calls
 def getc():
     import sys, tty, termios
     fd = sys.stdin.fileno()

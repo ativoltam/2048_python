@@ -5,7 +5,7 @@
 from random import randint
 from flask import render_template
 from app import app
-from flask import jsonify
+from flask import jsonify, request
 
 
 @app.route("/")
@@ -95,31 +95,26 @@ def rotate(n):  # rotate 90 degrees n times
 x = [[0 for c in range(4)] for r in range(4)]
 
 
-# c is the step what it reads from terminal input as of now, this will be changed for endpoint calls
-# def getc():
-#     import sys, tty, termios
-#     fd = sys.stdin.fileno()
-#     old_settings = termios.tcgetattr(fd)
-#     try:
-#         tty.setraw(sys.stdin.fileno())
-#         ch = sys.stdin.read(1)
-#     finally:
-#         termios.tcsetattr(fd, termios.TCSADRAIN, old_settings)
-#     return ch
+@app.route('/handle_direction', methods=["POST"])
+def handle_direction():
+    with app.test_request_context():
+        if request.method == 'POST':
+            direction_forward = request.form.get('up')
+            direction_backward = request.form.get('down')
+            direction_left = request.form.get('left')
+            direction_right = request.form.get('right')
+            if direction_forward is not None:
+                return "w"
+            if direction_backward is not None:
+                return "s"
+            if direction_left is not None:
+                return "a"
+            else: return "d"
 
 
 add_number()
-# while True:
-# print_board()
-    # move = getc()
-    # if move == 'q':
-    #     print_inline("Exiting...\n")
-    #     break
-    # moved = process_move(move)
-    # if moved: add_number()
-    # if max_value() >= 2048:
-    #     print_inline("You win\n")
-    #     break
-    # if count_zeroes() == 0:
-    #     print_inline("You lost\n")
-    #     break
+while True:
+    print_board()
+    move = handle_direction()
+    moved = process_move(move)
+    if moved: add_number()

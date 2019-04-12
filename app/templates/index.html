@@ -7,5 +7,25 @@
 {% block content %}
 {{ table }}
 {% endblock content %}
+<tr>
+    <td>
+        <form action="/handle_direction" method="POST">
+          <input type="hidden" name="site" value="up">
+          <button class="btn btn-default" type="submit" name="up" value="up">Up</button>
+        </form>
+        <form action="/handle_direction" method="POST">
+          <input type="hidden" name="site" value="down">
+          <button class="btn btn-default" type="submit" name="down" value="down">Down</button>
+        </form>
+        <form action="/handle_direction" method="POST">
+          <input type="hidden" name="site" value="left">
+          <button class="btn btn-default" type="submit" name="left" value="left">Left</button>
+        </form>
+        <form action="/handle_direction" method="POST">
+          <input type="hidden" name="site" value="right">
+          <button class="btn btn-default" type="submit" name="right" value="right">Right</button>
+        </form>
+    </td>
+</tr>
 </body>
 </html>

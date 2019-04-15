@@ -5,12 +5,12 @@
 from random import randint
 from flask import render_template
 from app import app
-from flask import jsonify, request, redirect, url_for
+from flask import jsonify, request, redirect, url_for, json
 
 
 @app.route("/")
 def main():
-    return render_template('index.html', table=x)
+    return render_template('index.html', table=json.dumps(x))
 
 
 def print_inline(s):
@@ -45,9 +45,6 @@ def add_number():
                 if x[i][j] == 0:
                     if pos == 0: x[i][j] = 2
                     pos -= 1
-    else:
-        msg = "Game over"
-        return render_template('index.html', msg=msg)
 
 
 def gravity():
@@ -81,7 +78,6 @@ def process_move(c):
             changed = any([gravity(), sum_up(), gravity()])
             rotate(4 - i)
             return changed
-    print("invalid move")
     return False
 
 

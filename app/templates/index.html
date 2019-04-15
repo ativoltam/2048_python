@@ -5,7 +5,32 @@
 </head>
 <body>
 {% block content %}
-{{ table }}
+{{ table }} {{ msg }}
+{% if msg != None %}
+{{ msg }}
+<tr>
+    <td>
+        <form action="/play_the_game" method="POST">
+          <input type="hidden" name="site" value="w">
+          <button class="btn btn-default" type="submit" name="w" value="w">Up</button>
+        </form>
+        <form action="/play_the_game" method="POST">
+          <input type="hidden" name="site" value="s">
+          <button class="btn btn-default" type="submit" name="s" value="s">Down</button>
+        </form>
+        <form action="/play_the_game" method="POST">
+          <input type="hidden" name="site" value="a">
+          <button class="btn btn-default" type="submit" name="a" value="a">Left</button>
+        </form>
+        <form action="/play_the_game" method="POST">
+          <input type="hidden" name="site" value="d">
+          <button class="btn btn-default" type="submit" name="d" value="d">Right</button>
+        </form>
+    </td>
+</tr>
+{% else %}
+{{ msg }}
+{% endif %}
 {% endblock content %}
 </body>
 </html>

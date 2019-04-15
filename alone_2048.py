@@ -5,12 +5,12 @@
 from random import randint
 from flask import render_template
 from app import app
-from flask import jsonify
+from flask import jsonify, request, redirect, url_for, json
 
 
 @app.route("/")
 def main():
-    return render_template('index.html', table=x)
+    return render_template('index.html', table=json.dumps(x))
 
 
 def print_inline(s):
@@ -34,18 +34,17 @@ def print_board():
         for i in range(0, 4):
             for j in range(0, 4):
                 print_inline('{:5d}'.format(x[i][j])),
-            print_new_line()
-        print_new_line()
         return jsonify(x)
 
 
 def add_number():
-    pos = randint(0, count_zeroes() - 1)
-    for i in range(0, 4):
-        for j in range(0, 4):
-            if x[i][j] == 0:
-                if pos == 0: x[i][j] = 2
-                pos -= 1
+    if count_zeroes() > 0:
+        pos = randint(0, count_zeroes() - 1)
+        for i in range(0, 4):
+            for j in range(0, 4):
+                if x[i][j] == 0:
+                    if pos == 0: x[i][j] = 2
+                    pos -= 1
 
 
 def gravity():
@@ -79,7 +78,6 @@ def process_move(c):
             changed = any([gravity(), sum_up(), gravity()])
             rotate(4 - i)
             return changed
-    print("invalid move")
     return False
 
 
@@ -95,31 +93,29 @@ def rotate(n):  # rotate 90 degrees n times
 x = [[0 for c in range(4)] for r in range(4)]
 
 
-# c is the step what it reads from terminal input as of now, this will be changed for endpoint calls
-# def getc():
-#     import sys, tty, termios
-#     fd = sys.stdin.fileno()
-#     old_settings = termios.tcgetattr(fd)
-#     try:
-#         tty.setraw(sys.stdin.fileno())
-#         ch = sys.stdin.read(1)
-#     finally:
-#         termios.tcsetattr(fd, termios.TCSADRAIN, old_settings)
-#     return ch
-
-
-add_number()
-# while True:
-# print_board()
-    # move = getc()
-    # if move == 'q':
-    #     print_inline("Exiting...\n")
-    #     break
-    # moved = process_move(move)
-    # if moved: add_number()
-    # if max_value() >= 2048:
-    #     print_inline("You win\n")
-    #     break
-    # if count_zeroes() == 0:
-    #     print_inline("You lost\n")
-    #     break
+@app.route('/play_the_game', methods=['GET', 'POST'])
+def play_the_game():
+    direction_forward = request.form.get('w')
+    direction_backward = request.form.get('s')
+    direction_left = request.form.get('a')
+    direction_right = request.form.get('d')
+    if direction_forward is not None:
+        process_move(direction_forward)
+        add_number()
+        print_board()
+        return redirect(url_for('main'))
+    if direction_backward is not None:
+        process_move(direction_backward)
+        add_number()
+        print_board()
+        return redirect(url_for('main'))
+    if direction_left is not None:
+        process_move(direction_left)
+        add_number()
+        print_board()
+        return redirect(url_for('main'))
+    if direction_right is not None:
+        process_move(direction_right)
+        add_number()
+        print_board()
+        return redirect(url_for('main'))

@@ -78,6 +78,7 @@ def process_move(c):
             changed = any([gravity(), sum_up(), gravity()])
             rotate(4 - i)
             return changed
+    print("invalid move")
     return False
 
 
@@ -102,20 +103,38 @@ def play_the_game():
     if direction_forward is not None:
         process_move(direction_forward)
         add_number()
-        print_board()
         return redirect(url_for('main'))
     if direction_backward is not None:
         process_move(direction_backward)
         add_number()
-        print_board()
         return redirect(url_for('main'))
     if direction_left is not None:
         process_move(direction_left)
         add_number()
-        print_board()
         return redirect(url_for('main'))
     if direction_right is not None:
         process_move(direction_right)
         add_number()
-        print_board()
         return redirect(url_for('main'))
+
+
+@app.route('/play_the_game/api/moves/<string:move>', methods=['GET'])
+def make_move(move):
+    if move == "up":
+        process_move("w")
+        add_number()
+        return redirect(url_for('main'))
+    if move == "down":
+        process_move("s")
+        add_number()
+        return redirect(url_for('main'))
+    if move == "left":
+        process_move("a")
+        add_number()
+        return redirect(url_for('main'))
+    if move == "right":
+        process_move("d")
+        add_number()
+        return redirect(url_for('main'))
+    else:
+        return "Invalid move!"

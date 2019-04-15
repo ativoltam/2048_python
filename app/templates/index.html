@@ -5,8 +5,9 @@
 </head>
 <body>
 {% block content %}
-{{ table }}
-{% endblock content %}
+{{ table }} {{ msg }}
+{% if msg != None %}
+{{ msg }}
 <tr>
     <td>
         <form action="/play_the_game" method="POST">
@@ -27,5 +28,9 @@
         </form>
     </td>
 </tr>
+{% else %}
+{{ msg }}
+{% endif %}
+{% endblock content %}
 </body>
 </html>

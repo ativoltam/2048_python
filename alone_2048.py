@@ -38,12 +38,16 @@ def print_board():
 
 
 def add_number():
-    pos = randint(0, count_zeroes() - 1)
-    for i in range(0, 4):
-        for j in range(0, 4):
-            if x[i][j] == 0:
-                if pos == 0: x[i][j] = 2
-                pos -= 1
+    if count_zeroes() > 0:
+        pos = randint(0, count_zeroes() - 1)
+        for i in range(0, 4):
+            for j in range(0, 4):
+                if x[i][j] == 0:
+                    if pos == 0: x[i][j] = 2
+                    pos -= 1
+    else:
+        msg = "Game over"
+        return render_template('index.html', msg=msg)
 
 
 def gravity():
@@ -99,21 +103,23 @@ def play_the_game():
     direction_backward = request.form.get('s')
     direction_left = request.form.get('a')
     direction_right = request.form.get('d')
-    add_number()
-    print_board()
     if direction_forward is not None:
         process_move(direction_forward)
         add_number()
+        print_board()
         return redirect(url_for('main'))
     if direction_backward is not None:
         process_move(direction_backward)
         add_number()
+        print_board()
         return redirect(url_for('main'))
     if direction_left is not None:
         process_move(direction_left)
         add_number()
+        print_board()
         return redirect(url_for('main'))
     if direction_right is not None:
         process_move(direction_right)
         add_number()
+        print_board()
         return redirect(url_for('main'))

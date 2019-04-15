@@ -17,24 +17,12 @@ def print_inline(s):
     print(s, end='')
 
 
-def print_new_line():
-    print('')
-
-
 def count_zeroes():
     return sum([sum([1 for c in r if c == 0]) for r in x])
 
 
 def max_value():
     return max([max(r) for r in x])
-
-
-def print_board():
-    with app.app_context():
-        for i in range(0, 4):
-            for j in range(0, 4):
-                print_inline('{:5d}'.format(x[i][j])),
-        return jsonify(x)
 
 
 def add_number():
@@ -78,7 +66,6 @@ def process_move(c):
             changed = any([gravity(), sum_up(), gravity()])
             rotate(4 - i)
             return changed
-    print("invalid move")
     return False
 
 
@@ -88,6 +75,11 @@ def rotate(n):  # rotate 90 degrees n times
         for i in range(0, 4):
             for j in range(0, 4):
                 x[i][3 - j] = y[j][i]
+
+
+def new_board():
+    global x
+    x = [[0 for c in range(4)] for r in range(4)]
 
 
 # Initialize board.
@@ -138,3 +130,10 @@ def make_move(move):
         return redirect(url_for('main'))
     else:
         return "Invalid move!"
+
+
+@app.route('/play_the_game/api/new_game', methods=['GET'])
+def new_game():
+    new_board()
+
+    return redirect(url_for('main'))

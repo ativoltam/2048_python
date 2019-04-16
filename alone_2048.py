@@ -28,12 +28,15 @@ def max_value():
 
 
 def add_number():
+    import random
+    list_of_num = [2, 4]
+    num = random.choice(list_of_num)
     if count_zeroes() > 0:
         pos = randint(0, count_zeroes() - 1)
         for i in range(0, 4):
             for j in range(0, 4):
                 if x[i][j] == 0:
-                    if pos == 0: x[i][j] = 2
+                    if pos == 0: x[i][j] = num
                     pos -= 1
 
 

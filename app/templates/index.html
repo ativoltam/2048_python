@@ -2,12 +2,11 @@
 <html lang="en" dir="ltr">
 <head>
     <title>2048</title>
+    <link rel="shortcut icon" href="/favicon.ico">
 </head>
 <body>
 {% block content %}
-{{ table }} {{ msg }}
-{% if msg != None %}
-{{ msg }}
+{{ table }}
 <tr>
     <td>
         <form action="/play_the_game" method="POST">
@@ -28,9 +27,6 @@
         </form>
     </td>
 </tr>
-{% else %}
-{{ msg }}
-{% endif %}
 {% endblock content %}
 </body>
 </html>

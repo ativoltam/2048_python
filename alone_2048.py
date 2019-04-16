@@ -95,20 +95,20 @@ def play_the_game():
     direction_left = request.form.get('a')
     direction_right = request.form.get('d')
     if direction_forward is not None:
-        process_move(direction_forward)
-        add_number()
+        moved = process_move(direction_forward)
+        if moved: add_number()
         return redirect(url_for('main'))
     if direction_backward is not None:
-        process_move(direction_backward)
-        add_number()
+        moved = process_move(direction_backward)
+        if moved: add_number()
         return redirect(url_for('main'))
     if direction_left is not None:
-        process_move(direction_left)
-        add_number()
+        moved = process_move(direction_left)
+        if moved: add_number()
         return redirect(url_for('main'))
     if direction_right is not None:
-        process_move(direction_right)
-        add_number()
+        moved = process_move(direction_right)
+        if moved: add_number()
         return redirect(url_for('main'))
 
 

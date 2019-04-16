@@ -5,7 +5,7 @@
 from random import randint
 from flask import render_template
 from app import app
-from flask import jsonify, request, redirect, url_for, json
+from flask import request, redirect, url_for, json
 
 
 @app.route("/")
@@ -110,30 +110,29 @@ def play_the_game():
         return redirect(url_for('main'))
 
 
-@app.route('/play_the_game/api/moves/<string:move>', methods=['GET'])
+@app.route('/play_the_game/api/moves/<string:move>')
 def make_move(move):
     if move == "up":
-        process_move("w")
-        add_number()
+        moved = process_move("w")
+        if moved: add_number()
         return redirect(url_for('main'))
     if move == "down":
-        process_move("s")
-        add_number()
+        moved = process_move("s")
+        if moved: add_number()
         return redirect(url_for('main'))
     if move == "left":
-        process_move("a")
-        add_number()
+        moved = process_move("a")
+        if moved: add_number()
         return redirect(url_for('main'))
     if move == "right":
-        process_move("d")
-        add_number()
+        moved = process_move("d")
+        if moved: add_number()
         return redirect(url_for('main'))
     else:
         return "Invalid move!"
 
 
-@app.route('/play_the_game/api/new_game', methods=['GET'])
+@app.route('/play_the_game/api/new_game')
 def new_game():
     new_board()
-
     return redirect(url_for('main'))

@@ -10,6 +10,8 @@ from flask import request, redirect, url_for, json
 
 @app.route("/")
 def main():
+    if count_zeroes() == 16:
+        add_number()
     return render_template('index.html', table=json.dumps(x))
 
 
@@ -135,4 +137,5 @@ def make_move(move):
 @app.route('/play_the_game/api/new_game')
 def new_game():
     new_board()
+    add_number()
     return redirect(url_for('main'))

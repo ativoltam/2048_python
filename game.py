@@ -1,4 +1,5 @@
 from random import randint
+import random
 
 
 class Game:
@@ -17,11 +18,10 @@ class Game:
         return max([max(r) for r in x])
 
     def add_number(self):
-        import random
         list_of_num = [2, 4]
         num = random.choice(list_of_num)
-        if Game.count_zeroes(self) > 0:
-            pos = randint(0, Game.count_zeroes(self) - 1)
+        if self.count_zeroes() > 0:
+            pos = randint(0, self.count_zeroes() - 1)
             for i in range(0, 4):
                 for j in range(0, 4):
                     if x[i][j] == 0:
@@ -53,9 +53,9 @@ class Game:
         moves = "wasd"  # up, left, down, right
         for i in range(len(moves)):
             if moves[i] == c:
-                Game.rotate(self, i)
-                changed = any([Game.gravity(self), Game.sum_up(self), Game.gravity(self)])
-                Game.rotate(self, 4 - i)
+                self.rotate(i)
+                changed = any([self.gravity(), self.sum_up(), self.gravity()])
+                self.rotate(4 - i)
                 return changed
         return False
 
@@ -69,4 +69,5 @@ class Game:
     def new_board(self):
         global x
         x = [[0 for c in range(4)] for r in range(4)]
+        self.add_number()
         return x

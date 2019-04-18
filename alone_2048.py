@@ -11,9 +11,9 @@ def main(board=None):
         uId = str(time.time())
         global_dict[uId] = b
         b.add_number()
-        return render_template('index.html', table=json.dumps(b.x))
+        return render_template('index.html', table=json.dumps(b.x), uId=uId)
     else:
-        print("asdasd")
+        print("asd")
         return render_template('index.html', table=json.dumps(board))
 
 

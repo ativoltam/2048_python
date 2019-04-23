@@ -1,121 +1,44 @@
-# CLI version of the 2048 game in python.
-#
-# - wasd for controls
-# - Does not support windows
-from random import randint
-from flask import render_template
+import time
 from app import app
-from flask import jsonify, request, redirect, url_for, json
+from game import *
+from flask import request, json, render_template
 
-
+global_dict = {}
 @app.route("/")
-def main():
-    return render_template('index.html', table=json.dumps(x))
+def main(board=None):
+    if board is None:
+        b = Game()
+        uId = str(time.time())
+        global_dict[uId] = b
+        b.add_number()
+        return render_template('index.html', table=json.dumps(b.x), uId=uId)
+    else:
+        return render_template('index.html', table=json.dumps(board))
 
 
-def print_inline(s):
-    print(s, end='')
-
-
-def print_new_line():
-    print('')
-
-
-def count_zeroes():
-    return sum([sum([1 for c in r if c == 0]) for r in x])
-
-
-def max_value():
-    return max([max(r) for r in x])
-
-
-def print_board():
-    with app.app_context():
-        for i in range(0, 4):
-            for j in range(0, 4):
-                print_inline('{:5d}'.format(x[i][j])),
-        return jsonify(x)
-
-
-def add_number():
-    if count_zeroes() > 0:
-        pos = randint(0, count_zeroes() - 1)
-        for i in range(0, 4):
-            for j in range(0, 4):
-                if x[i][j] == 0:
-                    if pos == 0: x[i][j] = 2
-                    pos -= 1
-
-
-def gravity():
-    changed = False
-    for i in range(0, 4):
-        for j in range(0, 4):
-            k = i
-            while k < 4 and x[k][j] == 0: k += 1
-            if k != i and k < 4:
-                x[i][j], x[k][j] = x[k][j], 0
-                changed = True
-    return changed
-
-
-def sum_up():
-    changed = False
-    for i in range(0, 3):
-        for j in range(0, 4):
-            if x[i][j] != 0 and x[i][j] == x[i + 1][j]:
-                x[i][j] = 2 * x[i][j]
-                x[i + 1][j] = 0
-                changed = True
-    return changed
-
-
-def process_move(c):
-    moves = "wasd"  # up, left, down, right
-    for i in range(len(moves)):
-        if moves[i] == c:
-            rotate(i)
-            changed = any([gravity(), sum_up(), gravity()])
-            rotate(4 - i)
-            return changed
-    return False
-
-
-def rotate(n):  # rotate 90 degrees n times
-    for i in range(0, n):
-        y = [row[:] for row in x]  # clone x
-        for i in range(0, 4):
-            for j in range(0, 4):
-                x[i][3 - j] = y[j][i]
-
-
-# Initialize board.
-x = [[0 for c in range(4)] for r in range(4)]
-
-
-@app.route('/play_the_game', methods=['GET', 'POST'])
+@app.route('/api/play_the_game')
 def play_the_game():
-    direction_forward = request.form.get('w')
-    direction_backward = request.form.get('s')
-    direction_left = request.form.get('a')
-    direction_right = request.form.get('d')
-    if direction_forward is not None:
-        process_move(direction_forward)
-        add_number()
-        print_board()
-        return redirect(url_for('main'))
-    if direction_backward is not None:
-        process_move(direction_backward)
-        add_number()
-        print_board()
-        return redirect(url_for('main'))
-    if direction_left is not None:
-        process_move(direction_left)
-        add_number()
-        print_board()
-        return redirect(url_for('main'))
-    if direction_right is not None:
-        process_move(direction_right)
-        add_number()
-        print_board()
-        return redirect(url_for('main'))
+    resp = request.get_json()
+    uId = str(resp['uId'])
+    direction = resp['direction']
+    b = global_dict[uId]
+    board = b.x
+    moved = b.process_move(direction)
+    if moved:
+        b.add_number()
+        return json.dumps(board)
+    return json.dumps(board)
+
+
+@app.route('/api/games')
+def games():
+    return str(global_dict)
+
+
+@app.route('/api/new_game')
+def new_game():
+    b = Game()
+    uId = str(time.time())
+    global_dict[uId] = b
+    b.add_number()
+    return uId, json.dumps(b.x)

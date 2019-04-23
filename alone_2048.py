@@ -3,6 +3,7 @@ from app import app
 from game import *
 from flask import request, json, render_template
 
+
 global_dict = {}
 @app.route("/")
 def main(board=None):
@@ -25,10 +26,14 @@ def play_the_game():
     board = b.x
     moved = b.process_move(direction)
     h_score = b.h_score
+    game_data = {"board": board, "h_score": h_score, "uId": uId}
+    game_dict = json.dumps(game_data)
     if moved:
         b.add_number()
-        return json.dumps(h_score)
-    return json.dumps(board)
+        game_data = {"board": board, "h_score": h_score, "uId": uId}
+        game_dict = json.dumps(game_data)
+        return game_dict
+    return game_dict
 
 
 @app.route('/api/games')
@@ -42,4 +47,8 @@ def new_game():
     uId = str(time.time())
     global_dict[uId] = b
     b.add_number()
-    return uId, json.dumps(b.x)
+    board = b.x
+    h_score = b.h_score
+    game_data = {"board": board, "h_score": h_score, "uId": uId}
+    game_dict = json.dumps(game_data)
+    return game_dict

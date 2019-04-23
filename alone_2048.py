@@ -24,9 +24,10 @@ def play_the_game():
     b = global_dict[uId]
     board = b.x
     moved = b.process_move(direction)
+    h_score = b.h_score
     if moved:
         b.add_number()
-        return json.dumps(board)
+        return json.dumps(h_score)
     return json.dumps(board)
 
 

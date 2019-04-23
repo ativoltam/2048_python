@@ -13,7 +13,6 @@ def main(board=None):
         b.add_number()
         return render_template('index.html', table=json.dumps(b.x), uId=uId)
     else:
-        print("asd")
         return render_template('index.html', table=json.dumps(board))
 
 

@@ -5,32 +5,17 @@
 </head>
 <body>
 {% block content %}
-{{ table }}
-{{ uId }}
-<tr>
-    <td>
-        <form action="/api/play_the_game" method="POST">
-          <input type="hidden" name="direction" value="w">
-          <input type="hidden" name="uId" value="{{ uId }}">
-          <button class="btn btn-default" type="submit">Up</button>
-        </form>
-        <form action="/api/play_the_game" method="POST">
-          <input type="hidden" name="direction" value="s">
-          <input type="hidden" name="uId" value="{{ uId }}">
-          <button class="btn btn-default" type="submit">Down</button>
-        </form>
-        <form action="/api/play_the_game" method="POST">
-          <input type="hidden" name="direction" value="a">
-          <input type="hidden" name="uId" value="{{ uId }}">
-          <button class="btn btn-default" type="submit">Left</button>
-        </form>
-        <form action="/api/play_the_game" method="POST">
-          <input type="hidden" name="direction" value="d">
-          <input type="hidden" name="uId" value="{{ uId }}">
-          <button class="btn btn-default" type="submit">Right</button>
-        </form>
-    </td>
-</tr>
+<table>
+    <tr>
+        <td>
+            <form action="save_user_highscore" method="POST">
+             <input type="hidden" name="h_score" value="{{ h_score }}">
+             <input type="text" name="u_name" value="Anonymus">
+             <button class="btn btn-default" type="submit">Save my score</button>
+           </form>
+        </td>
+    </tr>
+</table>
 {% endblock content %}
 </body>
 </html>

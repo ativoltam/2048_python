@@ -1,5 +1,5 @@
 import time
-from app import app
+from app import app, db
 from game import *
 from flask import request, render_template, jsonify
 
@@ -7,7 +7,6 @@ from flask import request, render_template, jsonify
 global_dict = {}
 @app.route("/")
 def main():
-    new_game()
     return render_template('index.html')
 
 
@@ -48,10 +47,18 @@ def new_game():
     return game_dict
 
 
-@app.route('/save_user_highscore', methods=['POST']) #curl -X POST -F 'u_name=Try_1' -F 'h_score=1500' 127.0.0.1:5000/save_user_highscore
+# @app.route('/save_user_highscore', methods=['POST']) #curl -X POST -F 'u_name=Try_1' -F 'h_score=1500' 127.0.0.1:5000/save_user_highscore
+# def save_user_highscore():
+#     u_name = request.form.get('u_name')
+#     h_score = request.form.get('h_score')
+#     db.save_to_db(u_name, h_score)
+#     return print(h_score, u_name)
+
+@app.route('/save_user_highscore') #curl -H 'Content-Type: application/json' -X GET 127.0.0.1:5000/save_user_highscore -d '{"u_name": "test_1", "h_score": 1000}'
 def save_user_highscore():
-    name = request.form.get('u_name')
-    best_score = request.form.get('h_score')
-    print(best_score)
-    print(name)
-    #save to db // SQLITE3
+    resp = request.get_json()
+    u_name = resp['u_name']
+    h_score = resp['h_score']
+    db.save_to_db(u_name, h_score)
+    msg = "Saved!"
+    return msg

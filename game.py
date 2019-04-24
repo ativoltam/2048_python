@@ -4,11 +4,11 @@ import random
 
 class Game:
     x = [[0 for c in range(4)] for r in range(4)]
-    h_score = 0
+    c_score = 0
 
     def __init__(self):
         self.x = self.new_board()
-        self.h_score = self.h_score
+        self.c_score = self.c_score
 
     def print_inline(self, s):
         print(s, end='')
@@ -47,7 +47,7 @@ class Game:
             for j in range(0, 4):
                 if self.x[i][j] != 0 and self.x[i][j] == self.x[i + 1][j]:
                     self.x[i][j] = 2 * self.x[i][j]
-                    self.h_score = self.h_score + self.x[i][j]
+                    self.c_score = self.c_score + self.x[i][j]
                     self.x[i + 1][j] = 0
                     changed = True
         return changed

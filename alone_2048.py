@@ -10,7 +10,7 @@ def main():
     return render_template('index.html')
 
 
-@app.route('/api/play_the_game', methods=['POST'])
+@app.route('/api/play_the_game', methods=['POST', 'GET'])
 def play_the_game():
     resp = request.get_json()
     uId = str(resp['uId'])
@@ -18,14 +18,17 @@ def play_the_game():
     b = global_dict[uId]
     board = b.x
     moved = b.process_move(direction)
-    h_score = b.h_score
-    game_data = {"board": board, "h_score": h_score, "uId": uId}
+    c_score = b.c_score
+    game_data = {"board": board, "c_score": c_score, "uId": uId}
     game_dict = jsonify(game_data)
     if moved:
         b.add_number()
-        game_data = {"board": board, "h_score": h_score, "uId": uId}
+        game_data = {"board": board, "c_score": c_score, "uId": uId}
         game_dict = jsonify(game_data)
         return game_dict
+    # if b.count_zeroes() == 0:
+    #     msg = "Game over"
+    #     return msg
     return game_dict
 
 
@@ -41,24 +44,24 @@ def new_game():
     global_dict[uId] = b
     b.add_number()
     board = b.x
-    h_score = b.h_score
-    game_data = {"board": board, "h_score": h_score, "uId": uId}
+    c_score = b.c_score
+    game_data = {"board": board, "c_score": c_score, "uId": uId}
     game_dict = jsonify(game_data)
     return game_dict
 
 
-# @app.route('/save_user_highscore', methods=['POST']) #curl -X POST -F 'u_name=Try_1' -F 'h_score=1500' 127.0.0.1:5000/save_user_highscore
+# @app.route('/save_user_highscore', methods=['POST']) #curl -X POST -F 'u_name=Try_1' -F 'c_score=1500' 127.0.0.1:5000/save_user_highscore
 # def save_user_highscore():
 #     u_name = request.form.get('u_name')
-#     h_score = request.form.get('h_score')
-#     db.save_to_db(u_name, h_score)
-#     return print(h_score, u_name)
+#     c_score = request.form.get('c_score')
+#     db.save_to_db(u_name, c_score)
+#     return print(c_score, u_name)
 
-@app.route('/save_user_highscore', methods=['POST']) #curl -H 'Content-Type: application/json' -X GET 127.0.0.1:5000/save_user_highscore -d '{"u_name": "test_1", "h_score": 1000}'
+@app.route('/save_user_highscore', methods=['POST', 'GET']) #curl -H 'Content-Type: application/json' -X GET 127.0.0.1:5000/save_user_highscore -d '{"u_name": "test_1", "c_score": 1000}'
 def save_user_highscore():
     resp = request.get_json()
     u_name = resp['u_name']
-    h_score = resp['h_score']
-    db.save_to_db(u_name, h_score)
+    c_score = resp['c_score']
+    db.save_to_db(u_name, c_score)
     msg = "Saved!"
     return msg

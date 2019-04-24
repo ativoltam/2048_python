@@ -10,7 +10,7 @@ def main():
     return render_template('index.html')
 
 
-@app.route('/api/play_the_game')
+@app.route('/api/play_the_game', methods=['POST'])
 def play_the_game():
     resp = request.get_json()
     uId = str(resp['uId'])
@@ -54,7 +54,7 @@ def new_game():
 #     db.save_to_db(u_name, h_score)
 #     return print(h_score, u_name)
 
-@app.route('/save_user_highscore') #curl -H 'Content-Type: application/json' -X GET 127.0.0.1:5000/save_user_highscore -d '{"u_name": "test_1", "h_score": 1000}'
+@app.route('/save_user_highscore', methods=['POST']) #curl -H 'Content-Type: application/json' -X GET 127.0.0.1:5000/save_user_highscore -d '{"u_name": "test_1", "h_score": 1000}'
 def save_user_highscore():
     resp = request.get_json()
     u_name = resp['u_name']

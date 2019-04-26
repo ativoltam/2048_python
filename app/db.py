@@ -9,9 +9,9 @@ def create_db():
     conn.close()
 
 
-def save_to_db(u_name, h_score):
+def save_to_db(u_name, c_score):
     conn = sqlite3.connect('scores.db')
     c = conn.cursor()
-    c.execute("INSERT INTO high_scores VALUES(?, ?)", (u_name, h_score))
+    c.execute("INSERT INTO high_scores VALUES(?, ?)", (u_name, c_score))
     conn.commit()
     conn.close()

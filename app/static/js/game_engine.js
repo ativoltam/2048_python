@@ -30,7 +30,7 @@ GameManager.prototype.setup = function(){
   request.onload = () => {
     // gameId and highScore
     this.gameId = request.response['uId'];
-    this.highScore = request.response['h_score'];
+    this.highScore = request.response['c_score'];
 
     // initialize the map
     updatedCells = request.response['board'];
@@ -103,7 +103,7 @@ GameManager.prototype.move = function (direction) {
       // get the new cells in 2D array
       var updatedCells = json['board'];
       // get the scores
-      var metaData = json['h_score'];
+      var metaData = json['c_score'];
 
       // // DEBUG
       // console.log("recieved 2D array is:  ");

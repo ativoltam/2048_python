@@ -24,7 +24,6 @@ def play_the_game():
         game_data = {"board": board, "c_score": c_score, "uId": uId}
         game_dict = jsonify(game_data)
         return game_dict
-    msg = "Game over"
     return False
 
 

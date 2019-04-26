@@ -17,20 +17,15 @@ def play_the_game():
     direction = resp['direction']
     b = global_dict[uId]
     board = b.x
-    legit = b.next_step_check()
-    if not legit:
-        msg = "Game over"
-        return msg
     moved = b.process_move(direction)
     c_score = b.c_score
-    game_data = {"board": board, "c_score": c_score, "uId": uId}
-    game_dict = jsonify(game_data)
-    if moved:
+    if moved is not None:
         b.add_number()
         game_data = {"board": board, "c_score": c_score, "uId": uId}
         game_dict = jsonify(game_data)
         return game_dict
-    return game_dict
+    msg = "Game over"
+    return False
 
 
 @app.route('/api/games')

@@ -17,6 +17,10 @@ def play_the_game():
     direction = resp['direction']
     b = global_dict[uId]
     board = b.x
+    legit = b.next_step_check()
+    if not legit:
+        msg = "Game over"
+        return msg
     moved = b.process_move(direction)
     c_score = b.c_score
     game_data = {"board": board, "c_score": c_score, "uId": uId}
@@ -26,9 +30,6 @@ def play_the_game():
         game_data = {"board": board, "c_score": c_score, "uId": uId}
         game_dict = jsonify(game_data)
         return game_dict
-    # if b.count_zeroes() == 0:
-    #     msg = "Game over"
-    #     return msg
     return game_dict
 
 

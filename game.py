@@ -5,10 +5,12 @@ import random
 class Game:
     x = [[0 for c in range(4)] for r in range(4)]
     c_score = 0
+    copy_board = []
 
     def __init__(self):
         self.x = self.new_board()
         self.c_score = self.c_score
+        self.copy_board = self.copy_board
 
     def print_inline(self, s):
         print(s, end='')
@@ -41,6 +43,27 @@ class Game:
                     changed = True
         return changed
 
+    def gravity_copy(self):
+        changed = False
+        for i in range(0, 4):
+            for j in range(0, 4):
+                k = i
+                while k < 4 and self.copy_board[k][j] == 0: k += 1
+                if k != i and k < 4:
+                    self.copy_board[i][j], self.copy_board[k][j] = self.copy_board[k][j], 0
+                    changed = True
+        return changed
+
+    def sum_up_copy(self):
+        changed = False
+        for i in range(0, 3):
+            for j in range(0, 4):
+                if self.copy_board[i][j] != 0 and self.copy_board[i][j] == self.copy_board[i + 1][j]:
+                    self.copy_board[i][j] = 2 * self.copy_board[i][j]
+                    self.copy_board[i + 1][j] = 0
+                    changed = True
+        return changed
+
     def sum_up(self):
         changed = False
         for i in range(0, 3):
@@ -53,12 +76,15 @@ class Game:
         return changed
 
     def process_move(self, c):
+        print(self.x)
+        print(self.copy_board, "**")
         moves = "wasd"  # up, left, down, right
         for i in range(len(moves)):
             if moves[i] == c:
                 self.rotate(i)
                 changed = any([self.gravity(), self.sum_up(), self.gravity()])
                 self.rotate(4 - i)
+                self.copy_board = [row[:] for row in self.x]
                 return changed
         return False
 
@@ -69,8 +95,30 @@ class Game:
                 for j in range(0, 4):
                     self.x[i][3 - j] = y[j][i]
 
+    def rotate_copy(self, n):  # rotate 90 degrees n times
+        for i in range(0, n):
+            y = [row[:] for row in self.copy_board]  # clone x
+            for i in range(0, 4):
+                for j in range(0, 4):
+                    self.copy_board[i][3 - j] = y[j][i]
+
+    def process_move_copy(self, c):
+        moves = "wasd"  # up, left, down, right
+        for i in range(len(moves)):
+            if moves[i] == c:
+                self.rotate_copy(i)
+                changed = any([self.gravity_copy(), self.sum_up_copy(), self.gravity_copy()])
+                self.rotate_copy(4 - i)
+                return changed
+        return False
+
+    def next_step_check(self):
+        changed = any([self.process_move_copy("w"), self.process_move_copy("a"), self.process_move_copy("s"),
+                       self.process_move_copy("d")])
+        return changed
+
     def new_board(self):
-        global x
         self.x = [[0 for c in range(4)] for r in range(4)]
+        self.copy_board = self.x
         self.add_number()
         return self.x

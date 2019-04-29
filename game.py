@@ -114,7 +114,6 @@ class Game:
     def next_step_check(self):
         changed = any([self.process_move_copy("w"), self.process_move_copy("a"), self.process_move_copy("s"),
                        self.process_move_copy("d")])
-        print(changed)
         return changed
 
     def new_board(self):

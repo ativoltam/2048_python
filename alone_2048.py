@@ -17,26 +17,30 @@ def play_the_game():
     direction = resp['direction']
     b = global_dict[uId]
     board = b.x
-    moved = b.process_move(direction)
-    print(b.next_step_check(), "////")
-    print(moved, " api resz")
+    legit = b.next_step_check()
     c_score = b.c_score
-    if moved and b.count_zeroes() != 0: # Nem spawnol, mert nem engedem lépni, de returne-ol egy False-t. moved ugye False
-        b.add_number()
-        game_data = {"board": board, "c_score": c_score, "uId": uId, "game_over": False}
-        game_dict = jsonify(game_data)
-        print(1)
-        return game_dict
-    elif moved and b.count_zeroes() == 0:
-        print(2)
-        game_data = {"board": board, "c_score": c_score, "uId": uId, "game_over": False}
-        game_dict = jsonify(game_data)
-        return game_dict
-    elif moved is None:
-        print(3)
-        game_data = {"board": board, "c_score": c_score, "uId": uId, "game_over": True}
-        game_dict = jsonify(game_data)
-        return game_dict
+    if legit:
+        moved = b.process_move(direction)
+        if moved and b.count_zeroes() != 0:
+            b.add_number()
+            game_data = {"board": board, "c_score": c_score, "uId": uId, "game_over": False}
+            game_dict = jsonify(game_data)
+            print(1)
+            return game_dict
+        elif moved:
+            game_data = {"board": board, "c_score": c_score, "uId": uId, "game_over": False}
+            game_dict = jsonify(game_data)
+            print(2)
+            return game_dict
+        else:
+            game_data = {"board": board, "c_score": c_score, "uId": uId, "game_over": False}
+            game_dict = jsonify(game_data)
+            print(3)
+            return game_dict
+    game_data = {"board": board, "c_score": c_score, "uId": uId, "game_over": True}
+    game_dict = jsonify(game_data)
+    return game_dict
+
 
 
 

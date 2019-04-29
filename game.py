@@ -76,20 +76,15 @@ class Game:
         return changed
 
     def process_move(self, c):
-        legit = self.next_step_check()
-        print(legit, "++")
-        if legit:
-            moves = "wasd"  # up, left, down, right
-            for i in range(len(moves)):
-                if moves[i] == c:
-                    self.rotate(i)
-                    changed = any([self.gravity(), self.sum_up(), self.gravity()])
-                    self.rotate(4 - i)
-                    self.copy_board = [row[:] for row in self.x]
-                    print(changed, "**")
-                    return changed
-            return False
-        return None
+        moves = "wasd"  # up, left, down, right
+        for i in range(len(moves)):
+            if moves[i] == c:
+                self.rotate(i)
+                changed = any([self.gravity(), self.sum_up(), self.gravity()])
+                self.rotate(4 - i)
+                self.copy_board = [row[:] for row in self.x]
+                return changed
+        return False
 
     def rotate(self, n):  # rotate 90 degrees n times
         for i in range(0, n):

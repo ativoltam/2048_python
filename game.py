@@ -22,7 +22,7 @@ class Game:
         return max([max(r) for r in self.x])
 
     def add_number(self):
-        list_of_num = [2, 2, 4]
+        list_of_num = [2, 2, 2, 2, 4]
         num = random.choice(list_of_num)
         if self.count_zeroes() > 0:
             pos = randint(0, self.count_zeroes() - 1)

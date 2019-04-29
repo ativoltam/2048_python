@@ -12,14 +12,8 @@ class Game:
         self.c_score = self.c_score
         self.copy_board = self.copy_board
 
-    def print_inline(self, s):
-        print(s, end='')
-
     def count_zeroes(self):
         return sum([sum([1 for c in r if c == 0]) for r in self.x])
-
-    def max_value(self):
-        return max([max(r) for r in self.x])
 
     def add_number(self):
         list_of_num = [2, 2, 2, 2, 4]

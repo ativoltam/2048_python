@@ -1,7 +1,7 @@
-import time
+import time, pickle
 from app import app, db
 from game import *
-from flask import request, render_template, jsonify
+from flask import request, render_template, jsonify, session
 
 
 global_dict = {}
@@ -15,7 +15,7 @@ def play_the_game():
     resp = request.get_json()
     uId = str(resp['uId'])
     direction = resp['direction']
-    b = global_dict[uId]
+    b = pickle.loads(session['uId'])
     board = b.x
     moved = b.process_move(direction)
     legit = b.next_step_check()
@@ -25,20 +25,22 @@ def play_the_game():
             b.add_number()
             game_data = {"board": board, "c_score": c_score, "uId": uId, "game_over": False}
             game_dict = jsonify(game_data)
+            session['uId'] = pickle.dumps(b)
             return game_dict
         elif moved:
             game_data = {"board": board, "c_score": c_score, "uId": uId, "game_over": False}
             game_dict = jsonify(game_data)
+            session['uId'] = pickle.dumps(b)
             return game_dict
         else:
             game_data = {"board": board, "c_score": c_score, "uId": uId, "game_over": False}
             game_dict = jsonify(game_data)
+            session['uId'] = pickle.dumps(b)
             return game_dict
     game_data = {"board": board, "c_score": c_score, "uId": uId, "game_over": True}
     game_dict = jsonify(game_data)
+    # session['uId'] = pickle.dumps(b)
     return game_dict
-
-
 
 
 @app.route('/api/games')
@@ -50,12 +52,12 @@ def games():
 def new_game():
     b = Game()
     uId = str(time.time())
-    global_dict[uId] = b
     b.add_number()
     board = b.x
     c_score = b.c_score
     game_data = {"board": board, "c_score": c_score, "uId": uId}
     game_dict = jsonify(game_data)
+    session['uId'] = pickle.dumps(b)
     return game_dict
 
 

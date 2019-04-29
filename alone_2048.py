@@ -4,7 +4,6 @@ from game import *
 from flask import request, render_template, jsonify, session
 
 
-global_dict = {}
 @app.route("/")
 def main():
     return render_template('index.html')
@@ -39,13 +38,7 @@ def play_the_game():
             return game_dict
     game_data = {"board": board, "c_score": c_score, "uId": uId, "game_over": True}
     game_dict = jsonify(game_data)
-    # session['uId'] = pickle.dumps(b)
     return game_dict
-
-
-@app.route('/api/games')
-def games():
-    return str(global_dict)
 
 
 @app.route('/api/new_game')
@@ -60,13 +53,6 @@ def new_game():
     session['uId'] = pickle.dumps(b)
     return game_dict
 
-
-# @app.route('/save_user_highscore', methods=['POST']) #curl -X POST -F 'u_name=Try_1' -F 'c_score=1500' 127.0.0.1:5000/save_user_highscore
-# def save_user_highscore():
-#     u_name = request.form.get('u_name')
-#     c_score = request.form.get('c_score')
-#     db.save_to_db(u_name, c_score)
-#     return print(c_score, u_name)
 
 @app.route('/save_user_highscore', methods=['POST', 'GET']) #curl -H 'Content-Type: application/json' -X GET 127.0.0.1:5000/save_user_highscore -d '{"u_name": "test_1", "c_score": 1000}'
 def save_user_highscore():

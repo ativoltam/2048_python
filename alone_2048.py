@@ -18,13 +18,26 @@ def play_the_game():
     b = global_dict[uId]
     board = b.x
     moved = b.process_move(direction)
+    print(b.next_step_check(), "////")
+    print(moved, " api resz")
     c_score = b.c_score
-    if moved is not None:
+    if moved and b.count_zeroes() != 0: # Nem spawnol, mert nem engedem lépni, de returne-ol egy False-t. moved ugye False
         b.add_number()
-        game_data = {"board": board, "c_score": c_score, "uId": uId}
+        game_data = {"board": board, "c_score": c_score, "uId": uId, "game_over": False}
+        game_dict = jsonify(game_data)
+        print(1)
+        return game_dict
+    elif moved and b.count_zeroes() == 0:
+        print(2)
+        game_data = {"board": board, "c_score": c_score, "uId": uId, "game_over": False}
         game_dict = jsonify(game_data)
         return game_dict
-    return False
+    elif moved is None:
+        print(3)
+        game_data = {"board": board, "c_score": c_score, "uId": uId, "game_over": True}
+        game_dict = jsonify(game_data)
+        return game_dict
+
 
 
 @app.route('/api/games')

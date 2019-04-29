@@ -22,7 +22,7 @@ class Game:
         return max([max(r) for r in self.x])
 
     def add_number(self):
-        list_of_num = [2, 4]
+        list_of_num = [2, 2, 4]
         num = random.choice(list_of_num)
         if self.count_zeroes() > 0:
             pos = randint(0, self.count_zeroes() - 1)
@@ -77,6 +77,7 @@ class Game:
 
     def process_move(self, c):
         legit = self.next_step_check()
+        print(legit, "++")
         if legit:
             moves = "wasd"  # up, left, down, right
             for i in range(len(moves)):
@@ -85,6 +86,7 @@ class Game:
                     changed = any([self.gravity(), self.sum_up(), self.gravity()])
                     self.rotate(4 - i)
                     self.copy_board = [row[:] for row in self.x]
+                    print(changed, "**")
                     return changed
             return False
         return None
@@ -117,6 +119,7 @@ class Game:
     def next_step_check(self):
         changed = any([self.process_move_copy("w"), self.process_move_copy("a"), self.process_move_copy("s"),
                        self.process_move_copy("d")])
+        print(changed)
         return changed
 
     def new_board(self):

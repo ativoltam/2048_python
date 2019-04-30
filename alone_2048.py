@@ -1,7 +1,7 @@
-import time, pickle
+import time
 from app import app, db
 from game import *
-from flask import request, render_template, jsonify, session
+from flask import request, render_template, jsonify
 
 
 global_dict = {}
@@ -28,16 +28,19 @@ def play_the_game():
             game_data = {"board": board, "c_score": c_score, "uId": uId, "game_over": False}
             game_dict = jsonify(game_data)
             # session['dict'][uId] = pickle.dumps(b)
+            global_dict[uId] = b
             return game_dict
         elif moved:
             game_data = {"board": board, "c_score": c_score, "uId": uId, "game_over": False}
             game_dict = jsonify(game_data)
             # session['dict'][uId] = pickle.dumps(b)
+            global_dict[uId] = b
             return game_dict
         else:
             game_data = {"board": board, "c_score": c_score, "uId": uId, "game_over": False}
             game_dict = jsonify(game_data)
             # session['dict'][uId] = pickle.dumps(b)
+            global_dict[uId] = b
             return game_dict
     game_data = {"board": board, "c_score": c_score, "uId": uId, "game_over": True}
     game_dict = jsonify(game_data)

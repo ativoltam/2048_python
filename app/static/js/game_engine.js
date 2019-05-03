@@ -69,6 +69,9 @@ GameManager.prototype.setup = function(){
 
 // Restart the game and asks for a new board and gameID
 GameManager.prototype.restart = function(){
+  this.metaData.game_over = false;
+  this.metaData.won = false;
+
   this.actuator.continueGame(); // Clear the game won/lost message
   console.log("restart function")
   this.setup();
@@ -158,6 +161,7 @@ GameManager.prototype.move = function (direction) {
 // Keep playing after winning (allows going over 2048)
 GameManager.prototype.keepPlaying = function () {
   this.actuator.continueGame(); // Clear the game won/lost message
+  this.metaData.won = False;
 };
 
 

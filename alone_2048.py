@@ -12,14 +12,20 @@ def main():
 
 @app.route('/api/play_the_game', methods=['POST', 'GET'])
 def play_the_game():
+    # get the move from front-end
     resp = request.get_json()
     uId = str(resp['uId'])
     direction = resp['direction']
+    # loads the board from session
     b = pickle.loads(session['uId'])
+
+    # moves with the board
     board = b.x
     moved = b.process_move(direction)
     legit = b.next_step_check()
     c_score = b.c_score
+
+    # if game is on
     if legit:
         if moved and b.count_zeroes() != 0:
             b.add_number()
@@ -27,19 +33,24 @@ def play_the_game():
             game_dict = jsonify(game_data)
             session['uId'] = pickle.dumps(b)
             return game_dict
+
+        # why this 2 exists??
         elif moved:
             game_data = {"board": board, "c_score": c_score, "uId": uId, "game_over": False}
             game_dict = jsonify(game_data)
             session['uId'] = pickle.dumps(b)
             return game_dict
+
+        # cant move
         else:
             game_data = {"board": board, "c_score": c_score, "uId": uId, "game_over": False}
             game_dict = jsonify(game_data)
             session['uId'] = pickle.dumps(b)
             return game_dict
+
+    # game is over
     game_data = {"board": board, "c_score": c_score, "uId": uId, "game_over": True}
     game_dict = jsonify(game_data)
-    # session['uId'] = pickle.dumps(b)
     return game_dict
 
 
@@ -55,7 +66,7 @@ def new_game():
     b.add_number()
     board = b.x
     c_score = b.c_score
-    game_data = {"board": board, "c_score": c_score, "uId": uId}
+    game_data = {"board": board, "c_score": c_score, "uId": uId, "game_over" : False}
     game_dict = jsonify(game_data)
     session['uId'] = pickle.dumps(b)
     return game_dict

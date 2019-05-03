@@ -3,8 +3,11 @@ import random
 
 
 class Game:
+
     x = [[0 for c in range(4)] for r in range(4)]
+
     c_score = 0
+
     copy_board = []
 
     def __init__(self):

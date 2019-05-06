@@ -1,10 +1,10 @@
-import time
+import time, pickle
 from app import app, db
 from game import *
 from flask import request, render_template, jsonify
 
 
-global_dict = {}
+# global_dict = {}
 @app.route("/")
 def main():
     return render_template('index.html')
@@ -15,9 +15,8 @@ def play_the_game():
     resp = request.get_json()
     uId = str(resp['uId'])
     direction = resp['direction']
-    b = global_dict[uId]
-    # b = pickle.loads(session['dict'][uId])
-    # b = session['dict'][uId]
+    b = db.get_game(uId)
+    print(b, "**")
     board = b.x
     moved = b.process_move(direction)
     legit = b.next_step_check()
@@ -27,29 +26,23 @@ def play_the_game():
             b.add_number()
             game_data = {"board": board, "c_score": c_score, "uId": uId, "game_over": False}
             game_dict = jsonify(game_data)
-            # session['dict'][uId] = pickle.dumps(b)
-            global_dict[uId] = b
             return game_dict
         elif moved:
             game_data = {"board": board, "c_score": c_score, "uId": uId, "game_over": False}
             game_dict = jsonify(game_data)
-            # session['dict'][uId] = pickle.dumps(b)
-            global_dict[uId] = b
             return game_dict
         else:
             game_data = {"board": board, "c_score": c_score, "uId": uId, "game_over": False}
             game_dict = jsonify(game_data)
-            # session['dict'][uId] = pickle.dumps(b)
-            global_dict[uId] = b
             return game_dict
     game_data = {"board": board, "c_score": c_score, "uId": uId, "game_over": True}
     game_dict = jsonify(game_data)
     return game_dict
 
 
-@app.route('/api/games')
-def games():
-    return str(global_dict)
+# @app.route('/api/games')
+# def games():
+#     return str(global_dict)
 
 
 @app.route('/api/new_game')
@@ -61,17 +54,16 @@ def new_game():
     c_score = b.c_score
     game_data = {"board": board, "c_score": c_score, "uId": uId}
     game_dict = jsonify(game_data)
-    # session['dict'][uId] = pickle.dumps(b)
-    # b = global_dict[uId]
-    global_dict[uId] = b
+    # global_dict[uId] = b
+    db.save_to_games_db(uId, pickle.dumps(b))
     return game_dict
 
 
-@app.route('/save_user_highscore', methods=['POST', 'GET']) #curl -H 'Content-Type: application/json' -X GET 127.0.0.1:5000/save_user_highscore -d '{"u_name": "test_1", "c_score": 1000}'
+@app.route('/save_user_highscore', methods=['POST', 'GET'])
 def save_user_highscore():
     resp = request.get_json()
     u_name = resp['u_name']
     c_score = resp['c_score']
-    db.save_to_db(u_name, c_score)
+    db.save_to_scores_db(u_name, c_score)
     msg = "Saved!"
     return msg

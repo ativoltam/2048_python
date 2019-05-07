@@ -1,5 +1,6 @@
 import time, pickle
 from app import app, db
+from app.models import Game_obj
 from game import *
 from flask import request, render_template, jsonify
 
@@ -15,8 +16,8 @@ def play_the_game():
     resp = request.get_json()
     uId = str(resp['uId'])
     direction = resp['direction']
-    b = db.get_game(uId)
-    print(b, "**")
+    z = Game_obj.query.filter_by(uId=uId).first()
+    b = Game(board=z.board)
     board = b.x
     moved = b.process_move(direction)
     legit = b.next_step_check()
@@ -26,17 +27,25 @@ def play_the_game():
             b.add_number()
             game_data = {"board": board, "c_score": c_score, "uId": uId, "game_over": False}
             game_dict = jsonify(game_data)
+            print(z.board == board)
+            db.session.commit()
             return game_dict
         elif moved:
             game_data = {"board": board, "c_score": c_score, "uId": uId, "game_over": False}
             game_dict = jsonify(game_data)
+            # db.session.add(b)
+            db.session.commit()
             return game_dict
         else:
             game_data = {"board": board, "c_score": c_score, "uId": uId, "game_over": False}
             game_dict = jsonify(game_data)
+            # db.session.add(b)
+            db.session.commit()
             return game_dict
     game_data = {"board": board, "c_score": c_score, "uId": uId, "game_over": True}
     game_dict = jsonify(game_data)
+    # db.session.add(b)
+    db.session.commit()
     return game_dict
 
 
@@ -47,15 +56,19 @@ def play_the_game():
 
 @app.route('/api/new_game')
 def new_game():
-    b = Game()
+    b = Game(board=None)
     uId = str(time.time())
     b.add_number()
     board = b.x
     c_score = b.c_score
+    game_obj = Game_obj(uId=uId, c_score=c_score, board=board)
     game_data = {"board": board, "c_score": c_score, "uId": uId}
     game_dict = jsonify(game_data)
     # global_dict[uId] = b
-    db.save_to_games_db(uId, pickle.dumps(b))
+    # db.save_to_games_db(uId, pickle.dumps(b))
+    db.session.add(game_obj)
+    db.session.commit()
+    print(board, "**")
     return game_dict
 
 

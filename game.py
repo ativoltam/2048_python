@@ -7,8 +7,11 @@ class Game:
     c_score = 0
     copy_board = []
 
-    def __init__(self):
-        self.x = self.new_board()
+    def __init__(self, board):
+        if board is None:
+            self.x = self.new_board()
+        else:
+            self.x = board
         self.c_score = self.c_score
         self.copy_board = self.copy_board
 

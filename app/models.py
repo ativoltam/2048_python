@@ -23,5 +23,3 @@ class Game_obj(db.Model):
     board = Column(ArrayType())
     c_score = db.Column(db.Integer)
 
-
-db.create_all()

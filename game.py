@@ -7,13 +7,13 @@ class Game:
     c_score = 0
     copy_board = []
 
-    def __init__(self, board):
+    def __init__(self, board, c_score):
         if board is None:
             self.x = self.new_board()
+            self.c_score = c_score
         else:
             self.x = board
-        self.c_score = self.c_score
-        self.copy_board = self.copy_board
+            self.c_score = c_score
 
     def count_zeroes(self):
         return sum([sum([1 for c in r if c == 0]) for r in self.x])

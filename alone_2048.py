@@ -1,11 +1,10 @@
-import time, pickle
+import time
 from app import app, db
 from app.models import Game_obj
 from game import *
 from flask import request, render_template, jsonify
 
 
-# global_dict = {}
 @app.route("/")
 def main():
     return render_template('index.html')
@@ -17,7 +16,7 @@ def play_the_game():
     uId = str(resp['uId'])
     direction = resp['direction']
     z = Game_obj.query.filter_by(uId=uId).first()
-    b = Game(board=z.board)
+    b = Game(board=z.board, c_score=z.c_score)
     board = b.x
     moved = b.process_move(direction)
     legit = b.next_step_check()
@@ -26,26 +25,27 @@ def play_the_game():
         if moved and b.count_zeroes() != 0:
             b.add_number()
             Game_obj.query.filter_by(uId=uId).update(dict(board=board))
+            Game_obj.query.filter_by(uId=uId).update({"c_score": c_score})
             game_data = {"board": board, "c_score": c_score, "uId": uId, "game_over": False}
             game_dict = jsonify(game_data)
             db.session.commit()
             return game_dict
         elif moved:
             Game_obj.query.filter_by(uId=uId).update(dict(board=board))
+            Game_obj.query.filter_by(uId=uId).update({"c_score": c_score})
             game_data = {"board": board, "c_score": c_score, "uId": uId, "game_over": False}
             game_dict = jsonify(game_data)
             db.session.commit()
             return game_dict
         else:
+            Game_obj.query.filter_by(uId=uId).update(dict(board=board))
+            Game_obj.query.filter_by(uId=uId).update({"c_score": c_score})
             game_data = {"board": board, "c_score": c_score, "uId": uId, "game_over": False}
             game_dict = jsonify(game_data)
-            Game_obj.query.filter_by(uId=uId).update(dict(board=board))
             db.session.commit()
             return game_dict
     game_data = {"board": board, "c_score": c_score, "uId": uId, "game_over": True}
     game_dict = jsonify(game_data)
-    Game_obj.query.filter_by(uId=uId).update(dict(board=board))
-    db.session.commit()
     return game_dict
 
 
@@ -56,7 +56,7 @@ def play_the_game():
 
 @app.route('/api/new_game')
 def new_game():
-    b = Game(board=None)
+    b = Game(board=None, c_score=0)
     uId = str(time.time())
     b.add_number()
     board = b.x
@@ -64,8 +64,6 @@ def new_game():
     game_obj = Game_obj(uId=uId, c_score=c_score, board=board)
     game_data = {"board": board, "c_score": c_score, "uId": uId}
     game_dict = jsonify(game_data)
-    # global_dict[uId] = b
-    # db.save_to_games_db(uId, pickle.dumps(b))
     db.session.add(game_obj)
     db.session.commit()
     return game_dict

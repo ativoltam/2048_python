@@ -25,26 +25,26 @@ def play_the_game():
     if legit:
         if moved and b.count_zeroes() != 0:
             b.add_number()
+            Game_obj.query.filter_by(uId=uId).update(dict(board=board))
             game_data = {"board": board, "c_score": c_score, "uId": uId, "game_over": False}
             game_dict = jsonify(game_data)
-            print(z.board == board)
             db.session.commit()
             return game_dict
         elif moved:
+            Game_obj.query.filter_by(uId=uId).update(dict(board=board))
             game_data = {"board": board, "c_score": c_score, "uId": uId, "game_over": False}
             game_dict = jsonify(game_data)
-            # db.session.add(b)
             db.session.commit()
             return game_dict
         else:
             game_data = {"board": board, "c_score": c_score, "uId": uId, "game_over": False}
             game_dict = jsonify(game_data)
-            # db.session.add(b)
+            Game_obj.query.filter_by(uId=uId).update(dict(board=board))
             db.session.commit()
             return game_dict
     game_data = {"board": board, "c_score": c_score, "uId": uId, "game_over": True}
     game_dict = jsonify(game_data)
-    # db.session.add(b)
+    Game_obj.query.filter_by(uId=uId).update(dict(board=board))
     db.session.commit()
     return game_dict
 
@@ -68,7 +68,6 @@ def new_game():
     # db.save_to_games_db(uId, pickle.dumps(b))
     db.session.add(game_obj)
     db.session.commit()
-    print(board, "**")
     return game_dict
 
 

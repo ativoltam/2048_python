@@ -34,14 +34,6 @@ def get_high_scores_from_db():
     return score_list
 
 
-# def save_games_db(uId, b):
-#     conn = sqlite3.connect('scores.db')
-#     c = conn.cursor()
-#     c.execute("INSERT INTO game_list VALUES(?, ?)", (uId, b))
-#     conn.commit()
-#     conn.close()
-
-
 def get_game(uId):
     conn = sqlite3.connect('database.db')
     c = conn.cursor()

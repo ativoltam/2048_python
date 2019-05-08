@@ -7,7 +7,6 @@ from flask import request, render_template, jsonify
 
 @app.route("/")
 def main():
-    database_2048.create_db()
     return render_template('index.html')
 
 

@@ -1,5 +1,5 @@
 import time
-from app import app, db
+from app import app, db, database_2048
 from app.models import Game_obj
 from game import *
 from flask import request, render_template, jsonify
@@ -7,6 +7,7 @@ from flask import request, render_template, jsonify
 
 @app.route("/")
 def main():
+    database_2048.create_db()
     return render_template('index.html')
 
 
@@ -49,9 +50,10 @@ def play_the_game():
     return game_dict
 
 
-# @app.route('/api/games')
-# def games():
-#     return str(global_dict)
+@app.route('/api/high_scores')
+def games():
+    scores = database_2048.get_high_scores_from_db()
+    return jsonify(scores)
 
 
 @app.route('/api/new_game')
@@ -74,6 +76,6 @@ def save_user_highscore():
     resp = request.get_json()
     u_name = resp['u_name']
     c_score = resp['c_score']
-    db.save_to_scores_db(u_name, c_score)
+    database_2048.save_to_scores_db(u_name, c_score)
     msg = "Saved!"
     return msg

@@ -5,10 +5,11 @@ sys.path.insert(0, parent_dir)
 from game import *
 
 import copy
+import itertools
 
 def empty_game():
 	game = Game()
-	game.x = copy.deepcopy(Game.x)
+	game.x = copy.deepcopy(Game.x) #using deepcopy to not reflect any other child of this object
 	game.copy_board = game.x[:]
 	game.c_score = Game.c_score
 	return game
@@ -83,6 +84,10 @@ class TestEmptyBoard(unittest.TestCase):
 		self.assertEqual(self.game.x[0][3],32)
 		self.assertEqual(self.game.x[1][2],8)
 
+	def test_new_board(self):
+		self.game.new_board()
+		matrix_list = list(itertools.chain.from_iterable(self.game.x)) #making a list from the matrix to use assertIn
+		self.assertIn(2 or 4,matrix_list)
 
 
 if __name__ == '__main__':

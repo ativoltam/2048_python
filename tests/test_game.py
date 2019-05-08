@@ -84,10 +84,22 @@ class TestEmptyBoard(unittest.TestCase):
 		self.assertEqual(self.game.x[0][3],32)
 		self.assertEqual(self.game.x[1][2],8)
 
+		
+		##### TESTING WITH RANDOMLY ADDED NUMBER(S) #####
+		
+
 	def test_new_board(self):
 		self.game.new_board()
-		matrix_list = list(itertools.chain.from_iterable(self.game.x)) #making a list from the matrix to use assertIn
-		self.assertIn(2 or 4,matrix_list)
+		matrix_list = list(itertools.chain.from_iterable(self.game.x)) #making a list from the matrix to use assertion
+		self.assertTrue(2 in matrix_list or 4 in matrix_list)
+
+	def test_randomboard_gravity(self):
+		self.game.new_board()
+		self.game.gravity()
+		#print(self.game.x[0])
+		self.assertTrue(2 in self.game.x[0] or 4 in self.game.x[0])
+		
+
 
 
 if __name__ == '__main__':

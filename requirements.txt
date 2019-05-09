@@ -1,3 +1,4 @@
+apscheduler
 sqlalchemy
 flask-sqlalchemy
 Flask==1.0.2

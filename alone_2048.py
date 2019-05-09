@@ -1,8 +1,9 @@
 import time
-from app import app, db, database_2048
+from app import app, db, database_2048, scheduler
 from app.models import Game_obj
 from game import *
 from flask import request, render_template, jsonify
+from datetime import datetime, timedelta
 
 
 @app.route("/")
@@ -57,12 +58,14 @@ def games():
 
 @app.route('/api/new_game')
 def new_game():
+    now = datetime.now()
+    expires_at = now + timedelta(hours=3)
     b = Game(board=None, c_score=0)
     uId = str(time.time())
     b.add_number()
     board = b.x
     c_score = b.c_score
-    game_obj = Game_obj(uId=uId, c_score=c_score, board=board)
+    game_obj = Game_obj(uId=uId, c_score=c_score, board=board, expires_at=expires_at)
     game_data = {"board": board, "c_score": c_score, "uId": uId}
     game_dict = jsonify(game_data)
     db.session.add(game_obj)
@@ -78,3 +81,18 @@ def save_user_highscore():
     database_2048.save_to_scores_db(u_name, c_score)
     msg = "Saved!"
     return msg
+
+
+@app.route('/schedulePrint', methods=['POST'])
+def schedule_to_print():
+    data = request.get_json()
+    time = data.get('time')
+    text = data.get('text')
+    date_time = datetime.strptime(str(time), '%Y-%m-%dT%H:%M')
+    job = scheduler.add_job(printing_something, trigger='date', next_run_time=str(date_time),
+                            args=[text])
+    return "job details: %s" % job
+
+
+def printing_something(text):
+    print("printing %s at %s" % (text, datetime.now()))

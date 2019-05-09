@@ -1,6 +1,6 @@
 from app import db
 from sqlalchemy.schema import Column
-from sqlalchemy.types import (String, TypeDecorator)
+from sqlalchemy.types import (String, TypeDecorator, DateTime)
 import json
 
 
@@ -22,4 +22,4 @@ class Game_obj(db.Model):
     uId = db.Column(db.String(30))
     board = Column(ArrayType())
     c_score = db.Column(db.Integer)
-
+    expires_at = Column(DateTime)

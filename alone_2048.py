@@ -1,5 +1,5 @@
 import time
-from app import app, db, database_2048, scheduler
+from app import app, db, database_2048
 from app.models import Game_obj
 from game import *
 from flask import request, render_template, jsonify
@@ -70,7 +70,6 @@ def new_game():
     game_dict = jsonify(game_data)
     db.session.add(game_obj)
     db.session.commit()
-    database_2048.delete_from_db(now)
     return game_dict
 
 
@@ -84,12 +83,3 @@ def save_user_highscore():
     return msg
 
 
-# @app.route('/schedulePrint', methods=['POST'])
-# def schedule_to_print():
-#     data = request.get_json()
-#     time = data.get('time')
-#     text = data.get('text')
-#     date_time = datetime.strptime(str(time), '%Y-%m-%dT%H:%M')
-#     job = scheduler.add_job(printing_something, trigger='date', next_run_time=str(date_time),
-#                             args=[text])
-#     return "job details: %s" % job

@@ -8,13 +8,6 @@ def create_db():
     conn.commit()
     conn.close()
 
-# def create_db():
-#     conn = sqlite3.connect('database.db')
-#     c = conn.cursor()
-#     c.execute("CREATE TABLE high_scores (id text, game text)")
-#     conn.commit()
-#     conn.close()
-
 
 def save_to_scores_db(u_name, c_score):
     conn = sqlite3.connect('scores.db')

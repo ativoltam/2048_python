@@ -11,7 +11,6 @@ from app import database_2048
 def delete_from_db():
     now = datetime.now()
     database_2048.delete_from_db(now)
-    print(now)
 
 
 app = Flask(__name__)
@@ -21,6 +20,7 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'
 db = SQLAlchemy(app)
 scheduler = BackgroundScheduler({'apscheduler.timezone': 'Europe/Budapest', 'daemon': True})
 scheduler.add_jobstore('sqlalchemy', url='sqlite:////tmp/schedule.db')
+scheduler.remove_all_jobs()
 job = scheduler.add_job(delete_from_db, trigger='interval', hours=24)
 scheduler.start()
 atexit.register(lambda: scheduler.shutdown())

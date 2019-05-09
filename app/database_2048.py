@@ -33,4 +33,3 @@ def delete_from_db(time):
     c.execute("DELETE FROM game_obj WHERE expires_at<?", (time, ))
     conn.commit()
     conn.close()
-

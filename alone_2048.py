@@ -81,5 +81,3 @@ def save_user_highscore():
     database_2048.save_to_scores_db(u_name, c_score)
     msg = "Saved!"
     return msg
-
-

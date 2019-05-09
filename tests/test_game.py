@@ -98,9 +98,58 @@ class TestEmptyBoard(unittest.TestCase):
 		self.game.gravity()
 		#print(self.game.x[0])
 		self.assertTrue(2 in self.game.x[0] or 4 in self.game.x[0])
+
+
+		##### TESTING "COPY" METHODS #####
+
+
+	def test_gravity_copy(self):
+		# move elements to the bottom on the Y-axis
 		
+		self.game.copy_board[0][2] = 8
+		self.game.copy_board[1][3] = 32
+		self.game.copy_board[3][2] = 8
 
+		# printing just to see what happens in CLI
+		# and making the display behave like 'gravity' in CLI
+		"""
+		print()		
+		for p in self.game.x[::-1]: 
+			print(p)
+		print()
+		"""
+		self.game.gravity_copy()
+		"""
+		for p in self.game.x[::-1]:
+			print(p)
+		print()
+		"""
 
+		self.assertEqual(self.game.copy_board[0][3],32)
+		self.assertEqual(self.game.copy_board[1][2],8)	
+
+	def test_sum_up_copy(self):
+		self.game.copy_board[2][0] = 4
+		self.game.copy_board[3][0] = 4
+		self.game.sum_up_copy()
+		self.assertEqual(self.game.copy_board[2][0],8)
+		self.assertEqual(self.game.copy_board[3][0],0)
+
+	def test_rotate_copy(self):
+		self.game.copy_board[0][0] = 8
+		self.game.rotate(2)
+		self.assertEqual(self.game.copy_board[3][3],8)
+
+	def test_move_copy(self):
+		self.game.copy_board[0][0] = 8
+		self.game.process_move_copy("d")
+		self.assertEqual(self.game.copy_board[0][3],8)
+		self.game.process_move_copy("s")
+		self.assertEqual(self.game.copy_board[3][3],8)
+		self.game.process_move_copy("a")
+		self.assertEqual(self.game.copy_board[3][0],8)
+		self.game.process_move_copy("w")
+		self.assertEqual(self.game.copy_board[0][0],8)
 
 if __name__ == '__main__':
 	unittest.main()

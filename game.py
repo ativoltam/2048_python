@@ -110,7 +110,7 @@ class Game:
                 self.rotate_copy(i)
                 changed = any([self.gravity_copy(), self.sum_up_copy(), self.gravity_copy()])
                 self.rotate_copy(4 - i)
-                self.copy_board = [row[:] for row in self.x]
+                #self.copy_board = [row[:] for row in self.x]
                 return changed
         return False
 

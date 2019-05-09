@@ -1,4 +1,4 @@
-import sqlite3, pickle
+import sqlite3
 
 
 def create_db():
@@ -34,13 +34,10 @@ def get_high_scores_from_db():
     return score_list
 
 
-def get_game(uId):
-    conn = sqlite3.connect('database.db')
+def delete_from_db(time):
+    conn = sqlite3.connect('app/database.db')
     c = conn.cursor()
-    c.execute("SELECT game FROM game_list WHERE id=?", (uId,))
-    gam = c.fetchone()
-    b = pickle.loads(gam[0])
+    c.execute("DELETE FROM game_obj WHERE expires_at<?", (time, ))
     conn.commit()
     conn.close()
-    print(b)
-    return b
+

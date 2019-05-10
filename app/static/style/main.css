@@ -7,13 +7,49 @@ html, body {
   font-family: "Clear Sans", "Helvetica Neue", Arial, sans-serif;
   font-size: 18px; }
 
+  .wrapper {
+    display: inline-block;
+    /* position: absolute; */
+    top: 100px;
+    bottom: 100px ;
+    left: 0;
+    right: 0;
+    width: 80%;
+    /* vertical-align: middle;
+    text-align: center; */
+    /* height: 0; */
+    overflow: hidden;
+    margin: auto;
+
+    }
 body {
-  margin: 80px 0; }
+  margin: 80px 100px;
+  }
 
 .heading:after {
   content: "";
   display: block;
-  clear: both; }
+  clear: both;
+  }
+
+.scoreboard {
+  width : 200px;
+  margin: 0px 50px;
+  display: inline-block;
+  float : left;}
+
+.scoreboard-container {
+  background: #bbada0;
+  padding: 15px 25px;
+  font-size: 16px;
+  line-height: 47px;
+  font-weight: bold;
+  border-radius: 3px;
+  color: white;
+  margin-top: 8px;
+  text-align: left;
+}
+
 
 h1.title {
   font-size: 80px;
@@ -117,7 +153,10 @@ hr {
 
 .container {
   width: 500px;
-  margin: 0 auto; }
+  margin: 0 auto;
+  display: inline-block;
+  float: left;
+  }
 
 @-webkit-keyframes fade-in {
   0% {
@@ -555,7 +594,11 @@ hr {
     min-width: 40px; }
 
   .heading {
-    margin-bottom: 10px; }
+    margin-bottom: 10px;
+   }
+
+  .scoreboard {
+    margin-bottom: 100px; }
 
   .game-intro {
     width: 55%;

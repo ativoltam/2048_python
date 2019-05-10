@@ -20,8 +20,8 @@
   <meta name="viewport" content="width=device-width, target-densitydpi=160dpi, initial-scale=1.0, maximum-scale=1, user-scalable=no, minimal-ui">
 </head>
 <body>
+<div class ="wrapper">
   <div class="container">
-
     <div class="heading">
       <h1 class="title">2048</h1>
       <div class="scores-container">
@@ -37,9 +37,12 @@
     <!--  -->
     <div class="game-container">
       <div class="game-message">
+        <p></p>
+
         <div class="lower">
 	        <a class="keep-playing-button">Keep going</a>
           <a class="retry-button">Try again</a>
+          <a class="save-button">Save score</a>
         </div>
       </div>
       <div class="grid-container">
@@ -85,9 +88,17 @@
     </p>
     <hr>
     <p>
-    Created by <a href="http://gabrielecirulli.com" target="_blank">Gabriele Cirulli.</a> Based on <a href="https://itunes.apple.com/us/app/1024!/id823499224" target="_blank">1024 by Veewo Studio</a> and conceptually similar to <a href="http://asherv.com/threes/" target="_blank">Threes by Asher Vollmer.</a>
+    Created by Team 2048. Based on <a href="http://gabrielecirulli.com" target="_blank">Gabriele Cirulli </a> and <a href="https://itunes.apple.com/us/app/1024!/id823499224" target="_blank">1024 by Veewo Studio</a> and conceptually similar to <a href="http://asherv.com/threes/" target="_blank">Threes by Asher Vollmer.</a>
     </p>
   </div>
+  <div class="scoreboard" >
+    <div class = "scoreboard-name">
+      <strong class="important">Scoreboard:</strong>
+    <div>
+    <div class = "scoreboard-container"><div>
+  </div>
+</div>
+
   <script src="static/js/bind_polyfill.js"></script>
   <script src="static/js/classlist_polyfill.js"></script>
   <script src="static/js/animframe_polyfill.js"></script>
@@ -97,6 +108,5 @@
   <script src="static/js/tile.js"></script>
   <script src="static/js/game_engine.js"></script>
   <script src="static/js/application.js"></script>
-
 </body>
 </html>

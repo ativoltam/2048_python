@@ -3,6 +3,7 @@ function HTMLActuator() {
   this.scoreContainer   = document.querySelector(".score-container");
   this.bestContainer    = document.querySelector(".best-container");
   this.messageContainer = document.querySelector(".game-message");
+
 }
 
 HTMLActuator.prototype.actuate = function (grid, metaData) {
@@ -11,41 +12,33 @@ HTMLActuator.prototype.actuate = function (grid, metaData) {
   window.requestAnimationFrame(function () {
     self.clearContainer(self.tileContainer);
 
-    // console.log(grid)
+    // update grid
     grid.cells.forEach(function (column) {
       column.forEach(function (cell) {
         if (cell) {
+          // console.log("actuate tile")
           // console.log(cell)
           self.addTile(cell);
         }
       });
     });
-  });
 
-
-  //   // go over the grid and update tiles if needed
-  //   for (let i of grid) {
-  //     for (let j of i) {
-  //       if (j > 0) {
-  //         // console.log(j + ".tile added ")
-  //         self.addTile(j);
-  //       };
-  //     };
-  //   };
-  // });
-
-    self.updateScore(metaData);
-    self.updateBestScore(metaData);
+    // update scores
+    self.updateScore(metaData.c_score);
+    self.updateBestScore(metaData.c_score);
     // console.log("The score is updated");
 
-    // if (metadata.terminated) {
-    //   if (metadata.over) {
-    //     self.message(false); // You lose
-    //   } else if (metadata.won) {
-    //     self.message(true); // You win!
-    //   }
-    // }
+    // DEBUG
+    // console.log("game_over: " + metaData.game_over);
+    // console.log("won: " + metaData.won);
 
+    if (metaData.game_over) {
+        self.message(false); // You lose
+      }
+    if (metaData.won) {
+        self.message(true); // You win!
+      }
+  });
 };
 
 // Continues the game (both restart and keep playing)
@@ -142,12 +135,14 @@ HTMLActuator.prototype.updateBestScore = function (bestScore) {
   this.bestContainer.textContent = bestScore;
 };
 
+// write out the game ending mesage if WON or not
 HTMLActuator.prototype.message = function (won) {
   var type    = won ? "game-won" : "game-over";
   var message = won ? "You win!" : "Game over!";
 
   this.messageContainer.classList.add(type);
   this.messageContainer.getElementsByTagName("p")[0].textContent = message;
+
 };
 
 HTMLActuator.prototype.clearMessage = function () {

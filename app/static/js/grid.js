@@ -3,7 +3,7 @@ function Grid(size, previousState) {
   this.cells = previousState ? this.fromState(previousState) : this.empty();
 }
 
-// Creates an empy grid for the first time
+// Build a grid of the specified size
 Grid.prototype.empty = function () {
   var cells = [];
 

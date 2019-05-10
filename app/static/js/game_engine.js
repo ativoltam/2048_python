@@ -26,12 +26,17 @@ function GameManager(size) {
   console.log("start a new game" + this.grid.cells)
   this.setup();
   console.log(this.grid.cells)
+
+  //update the scoreboard
+  this.getScoreboard();
+
 }
 
 
 // Initialize a new game and ask for a new "gameId"
 GameManager.prototype.setup = function(){
   var self = this;
+
 
   // get the gameId and the initial map
   var request = new XMLHttpRequest();
@@ -183,4 +188,36 @@ GameManager.prototype.save = function () {
   request.send(userData);
 
   this.restart(); // Clear the game won/lost message
+};
+
+
+// gets the scoreboard and print it
+GameManager.prototype.getScoreboard = function(){
+  var self = this;
+
+  this.scoreboardContainer = document.querySelector(".scoreboard-container");
+  console.log(this.scoreboardContainer)
+  // get the high scores list
+  var request = new XMLHttpRequest();
+  request.open("GET", "/api/high_scores");
+  request.responseType = 'json';
+  request.onload = () => {
+    // gameId and highScore
+    this.scoreboard = request.response;
+
+    // print the first 10 highscore
+    for (var i = 0;  i < 10; i++){
+
+      if (this.scoreboard[i] != null){
+        // create html properties and add them to index
+        var p = document.createElement("p")
+        p.innerHTML += (i + 1 +". " + this.scoreboard[i][0] + " : "+ this.scoreboard[i][1]);
+        this.scoreboardContainer.appendChild(p);
+      }
+    };
+
+    console.log("high score:")
+    console.log(this.scoreboard)
+    }
+  request.send();
 };

@@ -8,7 +8,7 @@ import copy
 import itertools
 
 def empty_game():
-	game = Game()
+	game = Game(board=None,c_score=0)
 	game.x = copy.deepcopy(Game.x) #using deepcopy to not reflect any other child of this object
 	game.copy_board = game.x[:]
 	game.c_score = Game.c_score
@@ -21,6 +21,7 @@ import unittest
 class TestEmptyBoard(unittest.TestCase):
 	def setUp(self):
 		self.game = empty_game()
+
 
 
 	def test_board_size(self):

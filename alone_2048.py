@@ -1,10 +1,11 @@
-import time, pickle
-from app import app, db
+import time
+from app import app, db, database_2048
+from app.models import Game_obj
 from game import *
-from flask import request, render_template, jsonify, session
+from flask import request, render_template, jsonify
+from datetime import datetime, timedelta
 
 
-global_dict = {}
 @app.route("/")
 def main():
     return render_template('index.html')
@@ -12,78 +13,71 @@ def main():
 
 @app.route('/api/play_the_game', methods=['POST', 'GET'])
 def play_the_game():
-    # get the move from front-end
     resp = request.get_json()
     uId = str(resp['uId'])
     direction = resp['direction']
-    # loads the board from session
-    b = pickle.loads(session['uId'])
-
-    # moves with the board
+    z = Game_obj.query.filter_by(uId=uId).first()
+    b = Game(board=z.board, c_score=z.c_score)
     board = b.x
     moved = b.process_move(direction)
     legit = b.next_step_check()
     c_score = b.c_score
-
-    # if game is on
     if legit:
         if moved and b.count_zeroes() != 0:
             b.add_number()
+            Game_obj.query.filter_by(uId=uId).update(dict(board=board))
+            Game_obj.query.filter_by(uId=uId).update({"c_score": c_score})
             game_data = {"board": board, "c_score": c_score, "uId": uId, "game_over": False}
             game_dict = jsonify(game_data)
-            session['uId'] = pickle.dumps(b)
+            db.session.commit()
             return game_dict
-
-        # why this 2 exists??
         elif moved:
+            Game_obj.query.filter_by(uId=uId).update(dict(board=board))
+            Game_obj.query.filter_by(uId=uId).update({"c_score": c_score})
             game_data = {"board": board, "c_score": c_score, "uId": uId, "game_over": False}
             game_dict = jsonify(game_data)
-            session['uId'] = pickle.dumps(b)
+            db.session.commit()
             return game_dict
-
-        # cant move
         else:
+            Game_obj.query.filter_by(uId=uId).update(dict(board=board))
+            Game_obj.query.filter_by(uId=uId).update({"c_score": c_score})
             game_data = {"board": board, "c_score": c_score, "uId": uId, "game_over": False}
             game_dict = jsonify(game_data)
-            session['uId'] = pickle.dumps(b)
+            db.session.commit()
             return game_dict
-
-    # game is over
     game_data = {"board": board, "c_score": c_score, "uId": uId, "game_over": True}
     game_dict = jsonify(game_data)
     return game_dict
 
 
-@app.route('/api/games')
+@app.route('/api/high_scores')
 def games():
-    return str(global_dict)
+    scores = database_2048.get_high_scores_from_db()
+    return jsonify(scores)
 
 
 @app.route('/api/new_game')
 def new_game():
-    b = Game()
+    now = datetime.now()
+    expires_at = now + timedelta(hours=3)
+    b = Game(board=None, c_score=0)
     uId = str(time.time())
     b.add_number()
     board = b.x
     c_score = b.c_score
-    game_data = {"board": board, "c_score": c_score, "uId": uId, "game_over" : False}
+    game_obj = Game_obj(uId=uId, c_score=c_score, board=board, expires_at=expires_at)
+    game_data = {"board": board, "c_score": c_score, "uId": uId}
     game_dict = jsonify(game_data)
-    session['uId'] = pickle.dumps(b)
+    db.session.add(game_obj)
+    db.session.commit()
     return game_dict
 
 
-# @app.route('/save_user_highscore', methods=['POST']) #curl -X POST -F 'u_name=Try_1' -F 'c_score=1500' 127.0.0.1:5000/save_user_highscore
-# def save_user_highscore():
-#     u_name = request.form.get('u_name')
-#     c_score = request.form.get('c_score')
-#     db.save_to_db(u_name, c_score)
-#     return print(c_score, u_name)
-
-@app.route('/save_user_highscore', methods=['POST', 'GET']) #curl -H 'Content-Type: application/json' -X GET 127.0.0.1:5000/save_user_highscore -d '{"u_name": "test_1", "c_score": 1000}'
+@app.route('/save_user_highscore', methods=['POST', 'GET'])
 def save_user_highscore():
     resp = request.get_json()
     u_name = resp['u_name']
     c_score = resp['c_score']
-    db.save_to_db(u_name, c_score)
+    database_2048.save_to_scores_db(u_name, c_score)
     msg = "Saved!"
     return msg

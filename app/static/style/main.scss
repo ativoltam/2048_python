@@ -39,6 +39,10 @@ body {
   @include clearfix;
 }
 
+.scoreboard {
+  @include clearfix;
+}
+
 h1.title {
   font-size: 80px;
   font-weight: bold;
@@ -510,6 +514,9 @@ hr {
     margin-bottom: 10px;
   }
 
+  .scoreboard {
+    margin-bottom: 12px;
+  }
   // Show intro and restart button side by side
   .game-intro {
     width: 55%;

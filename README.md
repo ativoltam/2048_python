@@ -1,2 +1,2 @@
-# Kunigami's work
-Work belongs to https://github.com/kunigami/blog-examples
+# Enjoy 2048!
+Based on https://github.com/kunigami/blog-examples

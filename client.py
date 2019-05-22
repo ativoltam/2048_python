@@ -11,10 +11,11 @@ import game
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('--baseurl', default='http://localhost:5000', help='2048 API URL')
+    parser.add_argument('--team', help='Team name to use')
     args = parser.parse_args(sys.argv[1:])
 
     session = Session(args.baseurl)
-    resp = session.get('/api/new_game').json()
+    resp = session.post('/api/new_game', json={'team_name': args.team}).json()
     uid = resp['uId']
     game_ = Game(resp['board'], resp['c_score'])
 

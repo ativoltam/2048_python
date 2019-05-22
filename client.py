@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 import argparse
+import copy
 import random
 import sys
 
@@ -12,6 +13,7 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('--baseurl', default='http://localhost:5000', help='2048 API URL')
     parser.add_argument('--team', help='Team name to use')
+    parser.add_argument('--debug', action='store_true', help='Show game state before move')
     args = parser.parse_args(sys.argv[1:])
 
     session = Session(args.baseurl)
@@ -19,8 +21,14 @@ def main():
     uid = resp['uId']
     game_ = Game(resp['board'], resp['c_score'])
 
+    move_count = 0
     while not resp.get('game_over'):
-        payload = {'uId': uid, 'direction': get_next_move(game_)}
+        if args.debug:
+            print(game_)
+        move_count += 1
+        direction = get_next_move(game_)
+        print('Move {}: {}'.format(move_count, direction))
+        payload = {'uId': uid, 'direction': direction}
         resp = session.post('/api/play_the_game', json=payload).json()
         game_ = Game(resp['board'], resp['c_score'])
 
@@ -32,6 +40,14 @@ def get_next_move(game):
 
 
 class Game(game.Game):
+    @property
+    def _valid_moves(self):
+        return [d for d in 'wasd' if copy.deepcopy(self).process_move(d)]
+
+    @property
+    def _empty_cells(self):
+        return sum(cell == 0 for row in self.x for cell in row)
+
     def __repr__(self):
         header = 'Game(c_score={})'.format(self.c_score)
         cells = [str(cell).rjust(4) for row in self.x for cell in row]

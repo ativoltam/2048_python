@@ -16,3 +16,7 @@ Fire up: https://thegame-2048.herokuapp.com/ !
 ## Customizing the strategy
 
 Edit `get_next_move()` in `client.py`.
+
+## Running live
+
+`./client.py --baseurl https://thegame-2048.herokuapp.com --team C_pityu_1`

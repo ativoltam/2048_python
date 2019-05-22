@@ -45,15 +45,16 @@ def main(argv=None):
     start_time = datetime.datetime.utcnow()
     move_count = 0
     while not resp.get('game_over'):
-        log.debug(game_)
         move_count += 1
         direction = get_next_move(game_)
-        log.debug('Move %s: %s', move_count, MOVES[direction])
+        log.debug('\n%s', game_)
         payload = {'uId': uid, 'direction': direction}
         resp = session.post('/api/play_the_game', json=payload).json()
+        log.info('Move #%s: %s (score %s)', move_count, MOVES[direction], resp['c_score'])
         game_ = Game(resp['board'], resp['c_score'])
     game_time = (datetime.datetime.utcnow() - start_time).total_seconds()
-    log.info('Game over. %s points in %s seconds (%s pts/s)', resp['c_score'], game_time, resp['c_score'] / game_time)
+    log.info('Game over. %s points in %s (%s pts/s)',
+        resp['c_score'], hr_timedelta(game_time), resp['c_score'] / game_time)
     log.info('Final game state:\n%s', game_)
 
 
@@ -86,6 +87,14 @@ def generate_start_move_score(args):
     return start_move, game.c_score
 
 
+def hr_timedelta(seconds):
+    seconds = int(seconds)
+    # h = seconds // (60 * 60)
+    m = seconds % (60 * 60) // 60
+    s = seconds % 60
+    return '{:>02}:{:>02}'.format(m, s)
+
+
 class Game(game.Game):
     @property
     def _valid_moves(self):
@@ -96,10 +105,9 @@ class Game(game.Game):
         return sum(cell == 0 for row in self.x for cell in row)
 
     def __repr__(self):
-        header = 'Game(c_score={})'.format(self.c_score)
         cells = [str(cell).rjust(4) for row in self.x for cell in row]
         rows = [','.join(str(cell).rjust(4) for cell in row) for row in self.x]
-        return '\n'.join([header] + rows)
+        return '\n'.join(rows)
 
 
 class Session(requests.Session):

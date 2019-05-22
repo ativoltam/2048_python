@@ -11,6 +11,23 @@ def main():
     return render_template('index.html')
 
 
+@app.route('/api/new_game')
+def new_game():
+    now = datetime.now()
+    expires_at = now + timedelta(hours=3)
+    b = Game(board=None, c_score=0)
+    uId = str(time.time())
+    b.add_number()
+    board = b.x
+    c_score = b.c_score
+    game_obj = Game_obj(uId=uId, c_score=c_score, board=board, expires_at=expires_at)
+    game_data = {"board": board, "c_score": c_score, "uId": uId}
+    game_dict = jsonify(game_data)
+    db.session.add(game_obj)
+    db.session.commit()
+    return game_dict
+
+
 @app.route('/api/play_the_game', methods=['POST', 'GET'])
 def play_the_game():
     resp = request.get_json()
@@ -50,29 +67,6 @@ def play_the_game():
     return game_dict
 
 
-@app.route('/api/high_scores')
-def games():
-    scores = database_2048.get_high_scores_from_db()
-    return jsonify(scores)
-
-
-@app.route('/api/new_game')
-def new_game():
-    now = datetime.now()
-    expires_at = now + timedelta(hours=3)
-    b = Game(board=None, c_score=0)
-    uId = str(time.time())
-    b.add_number()
-    board = b.x
-    c_score = b.c_score
-    game_obj = Game_obj(uId=uId, c_score=c_score, board=board, expires_at=expires_at)
-    game_data = {"board": board, "c_score": c_score, "uId": uId}
-    game_dict = jsonify(game_data)
-    db.session.add(game_obj)
-    db.session.commit()
-    return game_dict
-
-
 @app.route('/save_user_highscore', methods=['POST', 'GET'])
 def save_user_highscore():
     resp = request.get_json()
@@ -81,3 +75,9 @@ def save_user_highscore():
     database_2048.save_to_scores_db(u_name, c_score)
     msg = "Saved!"
     return msg
+
+
+@app.route('/api/high_scores')
+def games():
+    scores = database_2048.get_high_scores_from_db()
+    return jsonify(scores)

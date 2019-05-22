@@ -2,3 +2,17 @@
 Based on https://github.com/kunigami/blog-examples
 
 Fire up: https://thegame-2048.herokuapp.com/ !
+
+
+# How-to
+## Starting the server
+
+`./run.py`
+
+## Running your strategy
+
+`./client.py`
+
+## Customizing the strategy
+
+Edit `get_next_move()` in `client.py`.

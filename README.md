@@ -9,13 +9,13 @@ Fire up: https://thegame-2048.herokuapp.com/ !
 
 `./run.py`
 
-## Running your strategy
-
-`./client.py`
-
 ## Customizing the strategy
 
 Edit `get_next_move()` in `client.py`.
+
+## Running locally
+
+`./client.py --debug`
 
 ## Running live
 

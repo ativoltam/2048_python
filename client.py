@@ -59,6 +59,10 @@ def main(argv=None):
 
 
 def get_next_move(game):
+    return random.choice('wasd')
+
+
+def get_next_move(game):
     valid_moves = game._valid_moves  # cache
     if not valid_moves:
         return 'w'  # up as in "give up" - no more moves
